@@ -1,0 +1,5 @@
+uid,field,field_type,description,possible_values
+universally unique identifier,stop_id,int64,unique identifer for stop,
+universally unique identifier,pid,int64,unique identifer for person on a stop,
+universally unique identifier,basis_for_search,str,"basis for search, if officer searched person or property",https://oag.ca.gov/system/files/media/ripa-final-text-of-proposed-regulations.pdf
+universally unique identifier,basis_for_search_explanation,str,brief narrative explaining the reason for the search,

@@ -1,0 +1,33 @@
+﻿uid,field,field_type,description,possible_values
+universally unique identifier,id,int64,unique identifer for stop,
+universally unique identifier,ori,str,agency originating identifier,CA0371100 is the SDPD ORI
+universally unique identifier,agency,str,agency,SD
+universally unique identifier,expYears,int64,officer years of experience in law enforcement,
+universally unique identifier,stopdate,datetime64[ns],date  stop occurred,
+universally unique identifier,stoptime,str,time stop began,
+universally unique identifier,stopduration,int64,duration of time for stop in minutes,
+universally unique identifier,stopInResponseToCFS,int64,was the stop made in response to a call for service?,"0 = No, 1 = Yes"
+universally unique identifier,stopmadeduringwelfarecheck,int64,,"0 = No, 1 = Yes"
+universally unique identifier,stoptype,str,type of stop,"Vehicular, Bicycle, Pedestrian"
+universally unique identifier,officerAssignmentkey,int64,type of officer assignment at time of stop (code),see assignment attribute for descriptions of codes
+universally unique identifier,assignment,str,type of officer assignment at time of stop (description),https://oag.ca.gov/system/files/media/ripa-final-text-of-proposed-regulations.pdf
+universally unique identifier,intersection,str,location of stop - intersecting street name,
+universally unique identifier,block,float64,location of stop - hundred block,
+universally unique identifier,landmark,str,location of stop - landmark,
+universally unique identifier,street,str,location of stop - street name,
+universally unique identifier,highwayExit,str,location of stop - highway exit,
+universally unique identifier,isschool,int64,did stop occur at a school?,"0 = No, 1 = Yes"
+universally unique identifier,schoolName,str,name of school where stop occurred,
+universally unique identifier,cityname,str,name of city where stop occurred,
+universally unique identifier,beat,int64,location of stop - SDPD beat,http://seshat.datasd.org/pd/pd_beat_neighborhoods_datasd.csv
+universally unique identifier,beatName,str,location of stop - SDPD beat/neighborhood name,
+universally unique identifier,PID,int64,unique identifer for person on a stop,
+universally unique identifier,IsStudent,int64,was person stopped a student?,"0 = No, 1 = Yes"
+universally unique identifier,PerceivedLimitedEnglish,int64,officer's perception that the person stopped has limited or no fluency in English,"0 = No, 1 = Yes"
+universally unique identifier,PerceivedAge,int64,officer's perception of the approximate age of the person stopped,
+universally unique identifier,PerceivedGender,str,officer's perception of the gender of the person stopped (description),https://oag.ca.gov/system/files/media/ripa-final-text-of-proposed-regulations.pdf
+universally unique identifier,NonBinaryPerson,int64,officer's perception of whether the person stopped is Non Binary,"0 = No, 1 = Yes"
+universally unique identifier,PerceivedSexualOrientation,str,officer's perception of the sexual orientation of the person stopped (code),
+universally unique identifier,PerceivedUnhoused,int64,officer's perception of whether the person stopped is Unhoused,"0 = No, 1 = Yes"
+universally unique identifier,PassengerInVehicle,int64,was person stopeed a passenger in a vehicle,"0 = No, 1 = Yes"
+universally unique identifier,InsideResidence,int64,was person stopped inside a residence,"0 = No, 1 = Yes"

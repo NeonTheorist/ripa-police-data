@@ -1,0 +1,4 @@
+uid,field,field_type,description,possible_values
+universally unique identifier,stop_id,int64,unique identifer for stop,
+universally unique identifier,pid,int64,unique identifer for person on a stop,
+universally unique identifier,basisforpropertyseizure,str,basis for property seizure,https://oag.ca.gov/sites/all/files/agweb/pdfs/ripa/stop-data-reg-final-text-110717.pdf?

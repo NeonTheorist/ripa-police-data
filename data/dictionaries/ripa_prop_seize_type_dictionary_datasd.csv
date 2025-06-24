@@ -1,0 +1,4 @@
+uid,field,field_type,description,possible_values
+universally unique identifier,stop_id,int64,unique identifer for stop,
+universally unique identifier,pid,int64,unique identifer for person on a stop,
+universally unique identifier,type_of_property_seized,str,typeOfPropertySeized,https://oag.ca.gov/system/files/media/ripa-final-text-of-proposed-regulations.pdf

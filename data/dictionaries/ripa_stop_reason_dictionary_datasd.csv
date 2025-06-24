@@ -1,0 +1,8 @@
+uid,field,field_type,description,possible_values
+universally unique identifier,stop_id,int64,unique identifer for stop,
+universally unique identifier,pid,int64,unique identifer for person on a stop,
+universally unique identifier,reason_for_stop,str,primary reason the officer stopped the person,https://oag.ca.gov/system/files/media/ripa-final-text-of-proposed-regulations.pdf
+universally unique identifier,reason_for_stopcode,str,specific violation if reason for stop is traffic violation or reasonable suspicion of criminal activity (code),see reasonForStopCodeText attribute for descriptions of codes
+universally unique identifier,reason_for_stop_code_text,str,specific violation if reason for stop is traffic violation or reasonable suspicion of criminal activity (description),
+universally unique identifier,reason_for_stop_detail,str,detailed primary reason the officer stopped the person,https://oag.ca.gov/system/files/media/ripa-final-text-of-proposed-regulations.pdf
+universally unique identifier,reason_for_stop_explanation,str,brief narrative explaining the reason for the stop,
