@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: main  # DuckDB default
+    tables:
+      - name: ripa_stops_datasd_raw
+      - name: ripa_contraband_evid_datasd_raw
+      - name: ripa_disability_datasd_raw
+      - name: ripa_force_actions_datasd_raw
+      - name: ripa_nonforce_actions_datasd_raw
+      - name: ripa_prop_seize_basis_datasd_raw
+      - name: ripa_prop_seize_type_datasd_raw
+      - name: ripa_race_datasd_raw
+      - name: ripa_search_basis_datasd_raw
+      - name: ripa_stop_reason_datasd_raw
+      - name: ripa_stop_result_datasd_raw
