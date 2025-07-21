@@ -1,7 +1,7 @@
 name: 'sd_police_stops'
 version: '1.0.0'
 
-profile: 'sd_police_stops'
+profile: 'ripa_police_data'
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]
