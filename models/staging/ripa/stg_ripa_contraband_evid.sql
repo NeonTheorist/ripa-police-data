@@ -5,7 +5,7 @@
 with source as (
 
     select * 
-    from {{ source('raw', 'ripa_contraband_evid_datasd_raw') }}
+    from {{ source('raw', 'raw_ripa_contraband_evid_datasd') }}
 
 ),
 

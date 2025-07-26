@@ -5,7 +5,7 @@
 with source as (
 
     select * 
-    from {{ source('raw', 'ripa_prop_seize_type_datasd_raw') }}
+    from {{ source('raw', 'raw_ripa_prop_seize_type_datasd') }}
 
 ),
 
