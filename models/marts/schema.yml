@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: mart_search_yield_by_race_reason
+    description: "Search yield (finds/searches) by race and stop reason."
+    columns:
+      - name: perceived_race
+        tests: [not_null]
+      - name: stop_reason
+        tests: [not_null]
+      - name: searches
+        tests: [not_null]
+      - name: finds
+        tests: [not_null]
+      - name: yield_rate
+        tests: [not_null]
+
+  - name: mart_search_yield_by_race_basis
+    description: "Search yield (finds/searches) by race and search basis."
+    columns:
+      - name: perceived_race
+        tests: [not_null]
+      - name: search_basis
+        tests: [not_null]
+      - name: searches
+        tests: [not_null]
+      - name: finds
+        tests: [not_null]
+      - name: yield_rate
+        tests: [not_null]
