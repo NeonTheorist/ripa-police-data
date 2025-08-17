@@ -5,3 +5,10 @@ logs/
 
 # Never commit secrets
 secrets/*.json
+
+# Ignore editor lock/backup files
+*~
+*.swp
+*.swo
+*.tmp
+.~lock.*
