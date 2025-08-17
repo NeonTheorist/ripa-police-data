@@ -1,50 +1,63 @@
 {{ config(materialized = 'table') }}
 
 -- Base rows from the intermediate model
-with base as (
-  select
+WITH base AS (
+  SELECT
     stop_id,
-    coalesce(perceived_race, 'UNKNOWN') as perceived_race,
-    nullif(trim(stop_reason), '') as stop_reason,
-    nullif(trim(search_basis), '') as search_basis,
-    lower(coalesce(stop_result, '')) as stop_result
-  from {{ ref('int_search_outcomes') }}
+    COALESCE(perceived_race, 'UNKNOWN') AS perceived_race,
+    NULLIF(TRIM(stop_reason), '') AS stop_reason,
+    NULLIF(TRIM(search_basis), '') AS search_basis,
+    LOWER(COALESCE(stop_result, '')) AS stop_result
+  FROM {{ ref('int_search_outcomes') }}
 ),
 
--- One row per stop × race × reason where a search took place
-searched as (
-  select distinct
-    cast(stop_id as string) as stop_id,
+-- Distinct searches at the grain race x reason x stop
+searched AS (
+  SELECT DISTINCT
+    CAST(stop_id AS STRING) AS stop_id,
     perceived_race,
-    coalesce(stop_reason, 'UNKNOWN') as stop_reason
-  from base
-  where search_basis is not null
+    COALESCE(stop_reason, 'UNKNOWN') AS stop_reason
+  FROM base
+  WHERE search_basis IS NOT NULL
 ),
 
--- One row per stop × race × reason where contraband/evidence was found
-found as (
-  select distinct
-    cast(stop_id as string) as stop_id,
+-- Distinct "find" events (contraband/evidence)
+found AS (
+  SELECT DISTINCT
+    CAST(stop_id AS STRING) AS stop_id,
     perceived_race,
-    coalesce(stop_reason, 'UNKNOWN') as stop_reason
-  from base
-  where lower(stop_result) like '%contraband%' or lower(stop_result) like '%evidence%'
+    COALESCE(stop_reason, 'UNKNOWN') AS stop_reason
+  FROM base
+  WHERE stop_result LIKE '%contraband%' OR stop_result LIKE '%evidence%'
 ),
 
-agg as (
-  select
-    s.perceived_race,
-    s.stop_reason,
-    count(distinct s.stop_id) as searches,
-    count(distinct f.stop_id) as finds,
-    safe_divide(count(distinct f.stop_id), nullif(count(distinct s.stop_id), 0)) as yield_rate
-  from searched s
-  left join found f
-    on s.stop_id = f.stop_id
-   and s.perceived_race = f.perceived_race
-   and s.stop_reason = f.stop_reason
-  group by 1,2
+-- Counts by group
+search_counts AS (
+  SELECT
+    perceived_race,
+    stop_reason,
+    COUNT(DISTINCT stop_id) AS searches
+  FROM searched
+  GROUP BY perceived_race, stop_reason
+),
+
+find_counts AS (
+  SELECT
+    perceived_race,
+    stop_reason,
+    COUNT(DISTINCT stop_id) AS finds
+  FROM found
+  GROUP BY perceived_race, stop_reason
 )
 
-select * from agg
-order by perceived_race, stop_reason;
+SELECT
+  sc.perceived_race,
+  sc.stop_reason,
+  sc.searches,
+  IFNULL(fc.finds, 0) AS finds,
+  SAFE_DIVIDE(CAST(IFNULL(fc.finds, 0) AS FLOAT64), CAST(sc.searches AS FLOAT64)) AS yield_rate
+FROM search_counts sc
+LEFT JOIN find_counts fc
+  ON sc.perceived_race = fc.perceived_race
+ AND sc.stop_reason   = fc.stop_reason
+ORDER BY sc.perceived_race, sc.stop_reason;

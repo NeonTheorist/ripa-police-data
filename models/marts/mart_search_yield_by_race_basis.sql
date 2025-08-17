@@ -1,46 +1,58 @@
 {{ config(materialized = 'table') }}
 
-with base as (
-  select
+WITH base AS (
+  SELECT
     stop_id,
-    coalesce(perceived_race, 'UNKNOWN') as perceived_race,
-    nullif(trim(search_basis), '') as search_basis,
-    lower(coalesce(stop_result, '')) as stop_result
-  from {{ ref('int_search_outcomes') }}
+    COALESCE(perceived_race, 'UNKNOWN') AS perceived_race,
+    NULLIF(TRIM(search_basis), '') AS search_basis,
+    LOWER(COALESCE(stop_result, '')) AS stop_result
+  FROM {{ ref('int_search_outcomes') }}
 ),
 
-searched as (
-  select distinct
-    cast(stop_id as string) as stop_id,
+searched AS (
+  SELECT DISTINCT
+    CAST(stop_id AS STRING) AS stop_id,
     perceived_race,
-    coalesce(search_basis, 'UNKNOWN') as search_basis
-  from base
-  where search_basis is not null
+    COALESCE(search_basis, 'UNKNOWN') AS search_basis
+  FROM base
+  WHERE search_basis IS NOT NULL
 ),
 
-found as (
-  select distinct
-    cast(stop_id as string) as stop_id,
+found AS (
+  SELECT DISTINCT
+    CAST(stop_id AS STRING) AS stop_id,
     perceived_race,
-    coalesce(search_basis, 'UNKNOWN') as search_basis
-  from base
-  where lower(stop_result) like '%contraband%' or lower(stop_result) like '%evidence%'
+    COALESCE(search_basis, 'UNKNOWN') AS search_basis
+  FROM base
+  WHERE stop_result LIKE '%contraband%' OR stop_result LIKE '%evidence%'
 ),
 
-agg as (
-  select
-    s.perceived_race,
-    s.search_basis,
-    count(distinct s.stop_id) as searches,
-    count(distinct f.stop_id) as finds,
-    safe_divide(count(distinct f.stop_id), nullif(count(distinct s.stop_id), 0)) as yield_rate
-  from searched s
-  left join found f
-    on s.stop_id = f.stop_id
-   and s.perceived_race = f.perceived_race
-   and s.search_basis = f.search_basis
-  group by 1,2
+search_counts AS (
+  SELECT
+    perceived_race,
+    search_basis,
+    COUNT(DISTINCT stop_id) AS searches
+  FROM searched
+  GROUP BY perceived_race, search_basis
+),
+
+find_counts AS (
+  SELECT
+    perceived_race,
+    search_basis,
+    COUNT(DISTINCT stop_id) AS finds
+  FROM found
+  GROUP BY perceived_race, search_basis
 )
 
-select * from agg
-order by perceived_race, search_basis;
+SELECT
+  sc.perceived_race,
+  sc.search_basis,
+  sc.searches,
+  IFNULL(fc.finds, 0) AS finds,
+  SAFE_DIVIDE(CAST(IFNULL(fc.finds, 0) AS FLOAT64), CAST(sc.searches AS FLOAT64)) AS yield_rate
+FROM search_counts sc
+LEFT JOIN find_counts fc
+  ON sc.perceived_race = fc.perceived_race
+ AND sc.search_basis   = fc.search_basis
+ORDER BY sc.perceived_race, sc.search_basis;
