@@ -2,7 +2,7 @@
 
 with stops as (
     select
-        cast(stop_id as string) as stop_id,
+        stop_id,
         ori,
         agency,
         years_experience,
@@ -39,7 +39,7 @@ with stops as (
 
 search_basis as (
     select
-        cast(stop_id as string) as stop_id,
+        stop_id,
         person_id,
         search_basis,
         search_basis_explanation,
@@ -49,7 +49,7 @@ search_basis as (
 
 stop_result as (
     select
-        cast(stop_id as string) as stop_id,
+        stop_id,
         person_id,
         stop_result_code,
         stop_result,
@@ -61,7 +61,7 @@ stop_result as (
 
 stop_reason as (
     select
-        cast(stop_id as string) as stop_id,
+        stop_id,
         person_id,
         stop_reason,
         stop_reason_code,
@@ -74,7 +74,7 @@ stop_reason as (
 
 race as (
     select
-        cast(stop_id as string) as stop_id,
+        stop_id,
         person_id,
         perceived_race,
         inserted_at
