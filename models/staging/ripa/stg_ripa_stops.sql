@@ -12,7 +12,9 @@ with source as (
 renamed as (
 
     select
-        id as stop_id,
+        --id as stop_id,
+        --regexp_replace(cast(id as string), '[^0-9]', '') as stop_id,
+        cast(left(id, (length(id) - 1)) as int) as stop_id, 
         ori,
         agency,
         expYears as years_experience,

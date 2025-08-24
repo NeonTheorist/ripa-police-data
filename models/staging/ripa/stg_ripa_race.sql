@@ -13,6 +13,7 @@ renamed as (
 
     select
         id as stop_id,
+        --regexp_replace(cast(id as string), '[^0-9]', '') as stop_id,
         pid as person_id,
         race as perceived_race,
         insertdatetime as inserted_at
