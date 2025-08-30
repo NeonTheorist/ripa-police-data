@@ -1,9 +1,7 @@
 {{ config(
-    materialized = 'view'        -- switch to 'table' later if you want faster Tableau reads
+    materialized = 'view'
 ) }}
 
--- Unified dashboard mart: race x month (+ gender, age bucket, city, assignment)
--- Metrics: total_stops, searched_stops, search_rate, finds, yield_rate
 
 WITH base_raw AS (
   SELECT
