@@ -5,6 +5,9 @@
 -- Unified dashboard mart (race x month)
 -- Metrics: total_stops, searched_stops, search_rate, finds, yield_rate
 
+-- PREVIEW: unified dashboard dataset (race x month)
+-- Uses int_search_outcomes for stops/searches and stg_ripa_contraband_evid for finds.
+
 WITH base_raw AS (
   SELECT
     CAST(stop_id AS INT64) AS stop_id,
@@ -33,22 +36,25 @@ finds AS (
   FROM {{ ref('stg_ripa_contraband_evid') }}
 )
 
+agg AS (
+  SELECT
+    b.stop_month,
+    b.perceived_race,
+    COUNT(DISTINCT b.stop_id) AS total_stops,
+    COUNT(DISTINCT IF(b.had_search = 1, b.stop_id, NULL)) AS searched_stops,
+    COUNT(DISTINCT IF(f.stop_id IS NOT NULL, b.stop_id, NULL)) AS finds
+  FROM base b
+  LEFT JOIN finds f USING (stop_id)
+  GROUP BY 1, 2
+)
+
 SELECT
-  b.stop_month,
-  b.perceived_race,
-  COUNT(DISTINCT b.stop_id) AS total_stops,
-  COUNT(DISTINCT IF(b.had_search = 1, b.stop_id, NULL)) AS searched_stops,
-  SAFE_DIVIDE(
-    COUNT(DISTINCT IF(b.had_search = 1, b.stop_id, NULL)),
-    COUNT(DISTINCT b.stop_id)
-  ) AS search_rate,
-  COUNT(DISTINCT IF(f.stop_id IS NOT NULL, b.stop_id, NULL)) AS finds,
-  SAFE_DIVIDE(
-    COUNT(DISTINCT IF(f.stop_id IS NOT NULL, b.stop_id, NULL)),
-    NULLIF(COUNT(DISTINCT IF(b.had_search = 1, b.stop_id, NULL)), 0)
-  ) AS yield_rate
-FROM base b
-LEFT JOIN finds f
-  ON b.stop_id = f.stop_id
-GROUP BY 1, 2
-ORDER BY 1, 2;
+  stop_month,
+  perceived_race,
+  total_stops,
+  searched_stops,
+  SAFE_DIVIDE(searched_stops, total_stops) AS search_rate,
+  finds,
+  SAFE_DIVIDE(finds, searched_stops) AS yield_rate
+FROM agg
+ORDER BY stop_month, perceived_race;
