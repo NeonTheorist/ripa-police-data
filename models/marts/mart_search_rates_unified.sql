@@ -34,7 +34,7 @@ finds AS (
   SELECT DISTINCT
     CAST(stop_id AS INT64) AS stop_id
   FROM {{ ref('stg_ripa_contraband_evid') }}
-)
+),
 
 agg AS (
   SELECT
