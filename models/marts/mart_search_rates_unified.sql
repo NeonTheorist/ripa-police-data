@@ -30,4 +30,4 @@ SELECT
 FROM base b
 LEFT JOIN finds f ON b.stop_id = f.stop_id
 GROUP BY 1,2
-ORDER BY 1,2;
+ORDER BY 1,2
