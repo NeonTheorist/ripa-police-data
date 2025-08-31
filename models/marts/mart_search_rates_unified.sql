@@ -1,24 +1,14 @@
-{{ config(
-    materialized = 'view'
-) }}
-
--- Unified dashboard mart (race x month)
--- Metrics: total_stops, searched_stops, search_rate, finds, yield_rate
-
--- PREVIEW: unified dashboard dataset (race x month)
--- Uses int_search_outcomes for stops/searches and stg_ripa_contraband_evid for finds.
+{{ config(materialized='view') }}
 
 WITH base_raw AS (
   SELECT
     CAST(stop_id AS INT64) AS stop_id,
     perceived_race,
-    -- Be robust if stop_date is STRING in any rows
-    DATE_TRUNC(SAFE_CAST(stop_date AS DATE), MONTH) AS stop_month,
+    DATE_TRUNC(stop_date, MONTH) AS stop_month,
     CASE WHEN search_basis IS NOT NULL THEN 1 ELSE 0 END AS row_has_search
   FROM {{ ref('int_search_outcomes') }}
 ),
 
--- one row per stop_id x race x month with a "had_search" flag
 base AS (
   SELECT
     stop_id,
@@ -26,10 +16,9 @@ base AS (
     stop_month,
     MAX(row_has_search) AS had_search
   FROM base_raw
-  GROUP BY 1, 2, 3
+  GROUP BY stop_id, perceived_race, stop_month
 ),
 
--- distinct stops with contraband/evidence (finds)
 finds AS (
   SELECT DISTINCT
     CAST(stop_id AS INT64) AS stop_id
