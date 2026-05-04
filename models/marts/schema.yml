@@ -5,14 +5,143 @@ models:
     description: "One row per person on a stop, with search and find flags plus core demographic and stop context fields."
     columns:
       - name: stop_id
-        tests: [not_null]
+        description: "Stop identifier."
+        tests:
+          - not_null
+
       - name: pid
-        tests: [not_null]
+        description: "Person identifier within a stop."
+        tests:
+          - not_null
+
       - name: stop_date
-        tests: [not_null]
+        description: "Clean stop date."
+        tests:
+          - not_null
+
       - name: stop_month
-        tests: [not_null]
+        description: "First day of the stop month."
+        tests:
+          - not_null
+
       - name: had_search
-        tests: [not_null]
+        description: "1 if the person-stop had at least one nonblank search basis recorded, else 0."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+
       - name: had_find
-        tests: [not_null]
+        description: "1 if the person-stop had at least one nonblank contraband/evidence type recorded, else 0."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+
+      - name: perceived_race
+        description: "Perceived race for the person-stop, with ambiguous cases grouped together."
+
+      - name: perceived_gender
+        description: "Perceived gender for the person-stop."
+
+      - name: perceived_age
+        description: "Perceived age for the person-stop."
+
+      - name: age_bucket
+        description: "Age bucket derived from perceived age."
+
+      - name: agency
+        description: "Agency associated with the stop."
+
+      - name: city_name
+        description: "City associated with the stop."
+
+      - name: stop_reason
+        description: "Stop reason summarized to the person-stop grain."
+
+  - name: mart_search_yield_by_race_month
+    description: "Monthly search and yield summary by perceived race."
+    columns:
+      - name: stop_month
+        description: "First day of the month."
+        tests:
+          - not_null
+
+      - name: perceived_race
+        description: "Perceived race grouping."
+        tests:
+          - not_null
+
+      - name: total_stopped_persons
+        description: "Total number of stopped persons in the month-race group."
+        tests:
+          - not_null
+
+      - name: searched_persons
+        description: "Number of stopped persons with had_search = 1."
+        tests:
+          - not_null
+
+      - name: searched_and_found_persons
+        description: "Number of stopped persons with had_search = 1 and had_find = 1."
+        tests:
+          - not_null
+
+      - name: find_without_search_persons
+        description: "Number of stopped persons with had_search = 0 and had_find = 1."
+        tests:
+          - not_null
+
+      - name: search_rate
+        description: "searched_persons divided by total_stopped_persons."
+        tests:
+          - not_null
+
+      - name: yield_rate
+        description: "searched_and_found_persons divided by searched_persons. Null when searched_persons = 0."
+
+  - name: mart_search_yield_by_race_reason_month
+    description: "Monthly search and yield summary by perceived race and stop reason."
+    columns:
+      - name: stop_month
+        description: "First day of the month."
+        tests:
+          - not_null
+
+      - name: perceived_race
+        description: "Perceived race grouping."
+        tests:
+          - not_null
+
+      - name: stop_reason
+        description: "Stop reason grouping, with missing values bucketed."
+        tests:
+          - not_null
+
+      - name: total_stopped_persons
+        description: "Total number of stopped persons in the month-race-reason group."
+        tests:
+          - not_null
+
+      - name: searched_persons
+        description: "Number of stopped persons with had_search = 1."
+        tests:
+          - not_null
+
+      - name: searched_and_found_persons
+        description: "Number of stopped persons with had_search = 1 and had_find = 1."
+        tests:
+          - not_null
+
+      - name: find_without_search_persons
+        description: "Number of stopped persons with had_search = 0 and had_find = 1."
+        tests:
+          - not_null
+
+      - name: search_rate
+        description: "searched_persons divided by total_stopped_persons."
+        tests:
+          - not_null
+
+      - name: yield_rate
+        description: "searched_and_found_persons divided by searched_persons. Null when searched_persons = 0."
