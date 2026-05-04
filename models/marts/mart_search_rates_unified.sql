@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='view', enabled=false) }}
 
 WITH base_raw AS (
   SELECT

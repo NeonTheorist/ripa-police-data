@@ -1,4 +1,4 @@
-{{ config(materialized = 'table') }}
+{{ config(materialized='view', enabled=false) }}
 
 SELECT
   sc.perceived_race,
