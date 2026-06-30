@@ -23,6 +23,7 @@ models:
           - not_null
           - accepted_values:
               values: [0, 1]
+              quote: false
 
       - name: distinct_search_basis_count
         description: "Number of distinct nonblank search bases recorded for the person-stop."
@@ -53,6 +54,7 @@ models:
           - not_null
           - accepted_values:
               values: [0, 1]
+              quote: false
 
       - name: distinct_contraband_type_count
         description: "Number of distinct nonblank contraband/evidence types recorded for the person-stop."
