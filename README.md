@@ -10,6 +10,16 @@ View the Tableau Public dashboard here:
 
 [San Diego Police Stops - Search and Yield by Perceived Race](https://public.tableau.com/app/profile/alan.ward2828/viz/RIPATableauPublic/SDPoliceStops-Overview)
 
+## Dashboard Preview
+
+### Overview
+
+![Overview dashboard](assets/dashboard_overview.jpg)
+
+### Stop Reason Patterns
+
+![Stop reason patterns dashboard](assets/dashboard_stop_reason_patterns.jpg)
+
 ## Project Overview
 
 This project examines search and yield patterns in San Diego police stop data. The main analytical question is:
