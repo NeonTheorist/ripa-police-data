@@ -1,8 +1,14 @@
+```yaml
 version: 2
 
 models:
   - name: fct_ripa_person_stop
     description: "One row per person on a stop, with search and find flags plus core demographic and stop context fields."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - stop_id
+            - pid
     columns:
       - name: stop_id
         description: "Stop identifier."
@@ -61,6 +67,11 @@ models:
 
   - name: mart_search_yield_by_race_month
     description: "Monthly search and yield summary by perceived race."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - stop_month
+            - perceived_race
     columns:
       - name: stop_month
         description: "First day of the month."
@@ -96,12 +107,25 @@ models:
         description: "searched_persons divided by total_stopped_persons."
         tests:
           - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
 
       - name: yield_rate
         description: "searched_and_found_persons divided by searched_persons. Null when searched_persons = 0."
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
 
   - name: mart_search_yield_by_race_reason_month
     description: "Monthly search and yield summary by perceived race and stop reason."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - stop_month
+            - perceived_race
+            - stop_reason
     columns:
       - name: stop_month
         description: "First day of the month."
@@ -142,6 +166,14 @@ models:
         description: "searched_persons divided by total_stopped_persons."
         tests:
           - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
 
       - name: yield_rate
         description: "searched_and_found_persons divided by searched_persons. Null when searched_persons = 0."
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+```
