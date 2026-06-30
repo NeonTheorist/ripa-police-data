@@ -12,3 +12,10 @@ secrets/*.json
 *.swo
 *.tmp
 .~lock.*
+# Local backup / non-final workbook
+RIPA Tableau Public.twb
+
+# Local database files
+*.duckdb
+*.duckdb.wal
+db/*.duckdb
