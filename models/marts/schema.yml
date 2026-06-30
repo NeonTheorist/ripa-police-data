@@ -1,4 +1,3 @@
-```yaml
 version: 2
 
 models:
@@ -176,4 +175,4 @@ models:
           - dbt_utils.accepted_range:
               min_value: 0
               max_value: 1
-```
+
