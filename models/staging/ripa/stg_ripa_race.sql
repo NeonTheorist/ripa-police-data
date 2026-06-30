@@ -13,7 +13,6 @@ renamed as (
 
     select
         id as stop_id,
-        --regexp_replace(cast(id as string), '[^0-9]', '') as stop_id,
         pid as person_id,
         case
             when race in ('Hispanic/Latine(x)', 'Hispanic/Latino(a)')

@@ -2,16 +2,38 @@ version: 2
 
 sources:
   - name: raw
-    schema: ripa  # BigQuery dataset name
+    schema: ripa
+    description: "Raw San Diego RIPA source tables loaded into BigQuery."
     tables:
       - name: raw_ripa_stops_datasd
+        description: "Raw RIPA stop records."
+
       - name: raw_ripa_contraband_evid_datasd
+        description: "Raw contraband/evidence records associated with stops."
+
       - name: raw_ripa_disability_datasd
+        description: "Raw perceived-disability records associated with stops."
+
       - name: raw_ripa_force_actions_datasd
+        description: "Raw force-action records associated with stops."
+
       - name: raw_ripa_nonforce_actions_datasd
+        description: "Raw non-force action records associated with stops."
+
       - name: raw_ripa_prop_seize_basis_datasd
+        description: "Raw property-seizure basis records associated with stops."
+
       - name: raw_ripa_prop_seize_type_datasd
+        description: "Raw property-seizure type records associated with stops."
+
       - name: raw_ripa_race_datasd
+        description: "Raw officer-perceived race records associated with stops."
+
       - name: raw_ripa_search_basis_datasd
+        description: "Raw search-basis records associated with stops."
+
       - name: raw_ripa_stop_reason_datasd
+        description: "Raw stop-reason records associated with stops."
+
       - name: raw_ripa_stop_result_datasd
+        description: "Raw stop-result records associated with stops."

@@ -1,0 +1,131 @@
+version: 2
+
+models:
+  - name: stg_ripa_stops
+    description: >
+      Staging model for raw RIPA stop records. Renames source columns into
+      snake_case fields and preserves the stop_id/person_id grain used by
+      downstream person-stop models.
+    columns:
+      - name: stop_id
+        description: "Stop identifier from the raw RIPA stops table."
+        tests:
+          - not_null
+
+      - name: person_id
+        description: "Person identifier within a stop."
+        tests:
+          - not_null
+
+      - name: stop_date
+        description: "Raw stop date from the source table."
+
+      - name: agency
+        description: "Agency associated with the stop."
+
+      - name: city_name
+        description: "City associated with the stop."
+
+  - name: stg_ripa_search_basis
+    description: >
+      Staging model for raw RIPA search-basis records. Renames fields and keeps
+      one row per recorded search basis associated with a stop/person.
+    columns:
+      - name: stop_id
+        description: "Stop identifier."
+        tests:
+          - not_null
+
+      - name: person_id
+        description: "Person identifier within the stop."
+        tests:
+          - not_null
+
+      - name: search_basis
+        description: "Recorded basis for search."
+
+      - name: search_basis_explanation
+        description: "Free-text explanation associated with the search basis, when provided."
+
+      - name: inserted_at
+        description: "Source insert timestamp."
+
+  - name: stg_ripa_race
+    description: >
+      Staging model for raw RIPA perceived-race records. Standardizes Hispanic
+      perceived-race labels before downstream aggregation to the person-stop
+      grain.
+    columns:
+      - name: stop_id
+        description: "Stop identifier."
+        tests:
+          - not_null
+
+      - name: person_id
+        description: "Person identifier within the stop."
+        tests:
+          - not_null
+
+      - name: perceived_race
+        description: "Officer-perceived race value, with selected labels standardized."
+
+      - name: inserted_at
+        description: "Source insert timestamp."
+
+  - name: stg_ripa_stop_reason
+    description: >
+      Staging model for raw RIPA stop-reason records. Renames stop-reason fields
+      for downstream person-stop summaries and stop-reason analysis.
+    columns:
+      - name: stop_id
+        description: "Stop identifier."
+        tests:
+          - not_null
+
+      - name: person_id
+        description: "Person identifier within the stop."
+        tests:
+          - not_null
+
+      - name: stop_reason
+        description: "Recorded reason for the stop."
+
+      - name: stop_reason_code
+        description: "Stop-reason code from the source table."
+
+      - name: stop_reason_code_text
+        description: "Text associated with the stop-reason code."
+
+      - name: stop_reason_detail
+        description: "Additional stop-reason detail."
+
+      - name: stop_reason_explanation
+        description: "Free-text explanation associated with the stop reason, when provided."
+
+      - name: inserted_at
+        description: "Source insert timestamp."
+
+  - name: stg_ripa_contraband_evid
+    description: >
+      Staging model for raw RIPA contraband/evidence records. Renames fields
+      used to identify whether a searched person-stop produced recorded
+      contraband or evidence.
+    columns:
+      - name: stop_id
+        description: "Stop identifier."
+        tests:
+          - not_null
+
+      - name: person_id
+        description: "Person identifier within the stop."
+        tests:
+          - not_null
+
+      - name: stop_uid
+        description: "Source UID associated with the stop/evidence record."
+
+      - name: contraband_type
+        description: "Recorded contraband or evidence type."
+
+      - name: inserted_at
+        description: "Source insert timestamp."
